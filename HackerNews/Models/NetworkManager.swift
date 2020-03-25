@@ -8,8 +8,13 @@
 
 import Foundation
 
-
-class NetworkManager{
+// protocol ObservableObject - broadcasting
+class NetworkManager: ObservableObject{
+  
+  @Published var posts = [Post]()
+  
+  
+  
   
   func fetchData(){
     
@@ -21,7 +26,11 @@ class NetworkManager{
           if let safeData = data{
             do{
               let results = try decoder.decode(Results.self, from: safeData)
-              
+              DispatchQueue.main.async {
+                self.posts = results.hits
+                           print(self.posts)
+              }
+           
             } catch{
               print(error)
             }
